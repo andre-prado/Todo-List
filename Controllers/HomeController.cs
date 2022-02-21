@@ -8,16 +8,22 @@ namespace Todo.Controllers
     [Route("/")]
     public class HomeController : ControllerBase
     {
-        [HttpGet]
-        public List<TodoModel> Get([FromServices] AppDbContext context)
+        AppDbContext _context;
+        public HomeController([FromServices] AppDbContext context)
         {
-            return context.Todos.ToList();
+            _context = context;
         }
 
-        public TodoModel Post([FromServices] AppDbContext context, [FromBody] TodoModel todo)
+        [HttpGet]
+        public List<TodoModel> Get()
         {
-            context.Todos.Add(todo);
-            context.SaveChanges();
+            return _context.Todos.ToList();
+        }
+
+        public TodoModel Post([FromBody] TodoModel todo)
+        {
+            _context.Todos.Add(todo);
+            _context.SaveChanges();
             return todo;
         }
     }
